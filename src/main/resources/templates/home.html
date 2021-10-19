@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.87.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+          integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+          integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" th:href="@{css/blog.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+<div class="blog-header my-3 container h-100 position-sticky">
+    <nav class="navbar navbar-expand-lg rounded bg-dark navbar-dark text-light">
+        <div class="container-fluid">
+            <a class="h2 m-0" href="/" style="margin-right: 10px !important;">
+                <img th:src="@{https://ucarecdn.com/e56ebcfb-008f-437d-834e-d4b2876f7d89/logo.png}"
+                     style="height: 10vh"/>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <div class="dropdown">
+                        <div class="dropdown__select">
+                            <span class="dropdown__selected nav-link fw-bold">Giới thiệu</span>
+                            <i class="fa fa-caret-down dropdown__caret"></i>
+                        </div>
+                        <ul class="dropdown__list rounded">
+                            <li class="dropdown__item">
+                                <a class="nav-link fw-bold" href="#intro">Giới thiệu chung</a>
+                                <i class="fa fa-plus-circle dropdown__icon"></i>
+                            </li>
+                            <li class="dropdown__item">
+                                <a class="nav-link fw-bold" href="#last-post">Bài đăng gần
+                                    đây</a>
+                                <i class="fa fa-plus-circle dropdown__icon"></i>
+                            </li>
+                            <li class="dropdown__item">
+                                <a class="nav-link fw-bold" href="#lesson-hot">Chủ đề
+                                    hot</span></a>
+                                <i class="fa fa-fire dropdown__icon"></i>
+                            </li>
+                        </ul>
+                    </div>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" th:href="@{filter}">Làm
+                            bài</span></a>
+                    </li>
+                    <li class="nav-qa">
+                        <a class="nav-link fw-bold" href="">Hỏi</span></a>
+                    </li>
+                    <li class="nav-user">
+                        <a class="nav-link fw-bold" href="" data-bs-toggle="modal"
+                           data-bs-target="#modal-user">Cá nhân</span></a>
+                    </li>
+                    <div class="d-flex align-items-center" style="margin: 0 30px;">
+                        <p class="m-0 mx-2 time"></p>
+                    </div>
+                </ul>
+                <!-- background: #38d39f -->
+                <!--                <div sec:authorize="isAnonymous()">-->
+                <!--                    <a class="btn-login text-white nav-link d-flex align-items-center" href="#"-->
+                <!--                       style="padding: 0 0 0 15px; background: #38d39f;font-family: 'Quicksand', sans-serif;">-->
+                <!--                        Đăng nhập<i class="fa fa-user" aria-hidden="true"></i>-->
+                <!--                    </a>-->
+                <!--                </div>-->
+                <div class="username d-flex align-items-center position-relative"
+                     sec:authorize="isAuthenticated()">
+                    <h4 class="username-content m-0">
+                        <span class="text-light username-avatar"></span>
+                        <span class="username-name fw-bold text-uppercase" sec:authentication="name"></span>
+                    </h4>
+                    <span class="mx-3"><a class="text-white bg-danger rounded-circle py-1 px-2" href="/logout"
+                                          id="logout">
+                        <i class="fa fa-power-off" aria-hidden="true"></i></a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<!-- MODAL USER -->
+<div class="modal fade p-0" id="modal-user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen p-0">
+        <div class="modal-content">
+            <div class="modal-header py-0">
+                <h3 class="modal-title" id="title-modal-user">Cá nhân</h3>
+                <button class="btn-close btn-close-user" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row profile">
+                    <div class="col-md-3">
+                        <div class="profile-sidebar">
+                            <div class="profile-userpic d-flex justify-content-center">
+                                <img
+                                        th:src="@{https://ucarecdn.com/d5bf44ec-c21f-4a45-a345-954caba51591/avatar.png}"
+                                        class="img-responsive" alt="">
+                            </div>
+                            <div class="profile-usertitle" sec:authorize="isAuthenticated()">
+                                <div class="profile-usertitle-name text-uppercase" sec:authentication="name">
+                                </div>
+                                <div class="profile-usertitle-job" span sec:authentication="principal.authorities">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Table-->
+                    <div class="col-md-9 overflow-scroll" style="height: 70vh">
+                        <div class="profile-content">
+                            <div class="filter-point d-flex">
+                                <span class="filter-desc">
+                                    <i class="fa fa-sort-numeric-desc" aria-hidden="true"></i>
+                                </span>
+                                <span class="filter-asc mx-3">
+                                    <i class="fa fa-sort-numeric-asc" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <table class="table profile-content-point rounded">
+                                <thead class="table-dark position-sticky" style="top:0;">
+                                <tr>
+                                    <th scope="col">Mã đề thi</th>
+                                    <th scope="col">Tên môn thi</th>
+                                    <th scope="col">Số câu hỏi</th>
+                                    <th scope="col">Số điểm thi</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-result-user">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-filter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="title-filter">Lựa chọn</h3>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-range" class="text-center" method="POST" action="/filter/do-exam">
+                    <div class="d-flex align-items-center flex-column">
+                        <input type="text" name="code" class="modal-filter-code form-control w-25 text-center"
+                               readonly>
+                        <div class="easy my-3 d-flex align-content-center w-100">
+                            <label style=" text-align: end;width: 25vh;padding-right: 15px;">Câu hỏi
+                                dễ:</label>
+                            <input type="range" id="ques-easy" name="easy" min="0" max="20" value="0" step="2">
+                            <span class="val-easy">50</span>
+                        </div>
+                        <div class="normal my-3 d-flex align-content-center w-100">
+                            <label style=" text-align: end;width: 25vh;padding-right: 15px;">Câu hỏi
+                                trung bình:</label>
+                            <input type="range" id="ques-normal" name="normal" min="0" max="20" value="0" step="2">
+                            <span class="val-normal">50</span>
+                        </div>
+                        <div class="difficult my-3 d-flex align-content-center w-100">
+                            <label style=" text-align: end;width: 25vh;padding-right: 15px;">Câu hỏi
+                                khó:</label>
+                            <input type="range" id="ques-difficult" name="difficult" min="0" max="20" value="0"
+                                   step="2">
+                            <span class="val-difficult">50</span>
+                        </div>
+                    </div>
+                    <button class="custom-btn btn-5">Xác nhận</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="container bg-white rounded main-home">
+    <hr>
+    <div class="welcome mb-3 rounded overflow-hidden">
+        <div class="row">
+            <div class="col-8 welcome p-4
+                    text-white d-flex flex-column justify-content-center">
+                <div class="welcome-title"></div>
+                <div class="row">
+                    <div class="col-4"><img
+                            th:src="@{https://ucarecdn.com/503af26c-d754-4058-81ff-903bc914d0f6/learningremovebgpreview.png}"
+                            alt=""></div>
+                    <div class="col-4"><img
+                            th:src="@{https://ucarecdn.com/d26b98a9-68f7-400f-9c10-151f0665444c/useremovebgpreview.png}"
+                            alt=""></div>
+                    <div class="col-4"><img
+                            th:src="@{https://ucarecdn.com/946661d0-5589-491e-806e-62ffe452f7d5/teachremovebgpreview.png}"
+                            alt=""></div>
+                </div>
+            </div>
+            <div class="welcome-img col-4" style="padding-left: 0;"></div>
+        </div>
+    </div>
+    <div class="row m-0">
+        <div class="col-md-8 p-0">
+            <!-- INTRO -->
+            <div class="intro" id="intro">
+                <h1 class="text-center name-title fw-bold">Giới thiệu</h1>
+                <p style="text-indent: 30px;">Ngành công nghiệp hóa đất nước nói chung và ngành giáo dục nói riêng ngày
+                    càng
+                    phát triển. Vì thế, nhu cầu
+                    phát triển
+                    tri thức của con người ngày càng cao, trong đó có cả học sinh, giáo viên và những tổ chức giáo dục.
+                    Website
+                    thi trắc
+                    nghiệm trực tuyến được lên ý tưởng thiết kế cũng dựa trên nhu cầu cần thiết ấy.</p>
+                <div class="purpose d-flex">
+                    <div class="item w-100 m-2">
+                        <div class="item-thumb">
+                            <img th:src="@{https://ucarecdn.com/55bc0cba-ad86-4161-9729-baf50cf89b40/purpose1.jpg}"
+                                 class="w-100" alt="">
+                        </div>
+                        <div class="item-txt d-flex flex-column justify-content-center align-items-center">
+                            <h3>Về ý tưởng</h3>
+                            <p>Dựa trên nhu cầu học tập và giảng dạy của sinh viên và giáo viên trong và ngoài
+                                nhà
+                                trường.</p>
+                        </div>
+                    </div>
+                    <div class="item w-100 m-2">
+                        <div class="item-thumb">
+                            <img th:src="@{https://ucarecdn.com/4bed482b-ee4f-4d1f-aff4-ec62fc09af23/purpose2.jpg}"
+                                 class="w-100" alt="">
+                        </div>
+                        <div class="item-txt d-flex flex-column justify-content-center align-items-center">
+                            <h3>Về mục đích</h3>
+                            <p>Giúp sinh viên ôn tập và bổ sung kiến thức, giúp giáo viên tiết kiệm thời gian,
+                                công sức.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Service -->
+            <div class="services mt-2">
+                <h1 class="text-center name-title fw-bold">Các chức năng chính</h1>
+                <div class="detail mt-3 bg-white p-2 rounded">
+                    <div class="btn btn-success">
+                        <h4 class="m-0">Phân quyền</h4>
+                    </div>
+                    <p style="text-indent: 30px;">Website được phân chia thành 4 quyền truy cập: khách, thí sinh,
+                        admin. Mỗi quyền truy cập có
+                        những chức năng
+                        khác nhau. Chi tiết một số chức năng chính được thể hiện<a class="d-inline nav-link p-1"
+                                                                                   href="#">tại
+                            đây</a>.
+                    </p>
+                    <div class="btn btn-success">
+                        <h4 class="m-0">Quản lý ngân hàng câu hỏi</h4>
+                    </div>
+                    <p style="text-indent: 30px;">
+                        Nếu ngân hàng câu hỏi được quản lý tốt, hiệu quả thì việc sử dụng để tạo nên những bài thi chất
+                        lượng, thú
+                        vị mới có thể
+                        được thực hiện. Việc quản lý ngân hàng câu hỏi thường được cài đặt ở chế độ bảo mật, từ đó bảo
+                        vệ an toàn
+                        cho chất lượng
+                        của từng bài thi tới người dùng.</p>
+                    <div class="btn btn-success">
+                        <h4 class="m-0">Quản lý đề thi</h4>
+                    </div>
+                    <p style="text-indent: 30px;">
+                        Áp dụng khung đề thi đầy đủ, tạo đề thi nhanh chóng và dễ dàng, có nhiều phần thi trong một bài
+                        thi… được
+                        đảm bảo bởi
+                        tính năng quản lý đề thi. Tính năng thi trực tuyến khi được tích hợp giúp việc làm bài trên
+                        trình duyệt
+                        web, hay trên
+                        ứng dụng của thiết bị di động… đều có thể thực hiện được. Việc làm bài tự động, kiểm soát chuẩn
+                        xác về mặt
+                        thời gian
+                        giúp phần làm bài trắc nghiệm theo nhu cầu của từng người được đáp ứng tốt nhất.</p>
+                    <div class="btn btn-success">
+                        <h4 class="m-0">Thi trực tuyến</h4>
+                    </div>
+                    <p style="text-indent: 30px;">
+                        Thí sinh làm bài thi trên giao diện của trình duyệt web, hệ thống tự động tính thời gian và
+                        ngừng cho thí
+                        sinh khi hết
+                        giờ làm bài, nhiều thí sinh ở khắp nơi có thể thi đồng thời cùng lúc. Đối với tính năng thi trực
+                        tuyến cần
+                        có đủ chế độ
+                        thi thử và thi chính thức. Việc làm quen dễ dàng, tham gia thi thuận lợi được đảm bảo khi tính
+                        năng thi
+                        trực tuyến hoàn
+                        thiện chất lượng.</p>
+                    <div class="btn btn-success">
+                        <h4 class="m-0">Giám sát thi</h4>
+                    </div>
+                    <p style="text-indent: 30px;">Giám sát được từng phòng thi, theo dõi và thống kê tình trạng làm bài,
+                        hay
+                        tình trạng kết nối, xử lý những vi phạm trong
+                        quá trình thi, xem và in bảng điểm… cùng nhiều khả năng khác được hỗ trợ và tích hợp đầy đủ.
+                        Việc giám sát
+                        phòng thi tốt
+                        sẽ đem lại hiệu quả cao và tăng khả năng hoàn thiện chất lượng của bài trắc nghiệm online.</p>
+                    <p style="text-indent: 30px;">Bạn được sử dụng chức năng chính của website chỉ khi được là thành
+                        viên
+                        của
+                        website, bạn có thể đăng ký
+                        thành viên tại
+                        đây, nếu đã có tài khoản bạn có thể đăng
+                        nhập.</p>
+                </div>
+            </div>
+            <!-- ISHOT -->
+            <div class="lesson-hot mt-2 pb-2" id="lesson-hot">
+                <h1 class="text-center name-title fw-bold">Một số dạng phổ biến</h1>
+                <div class="lesson-hot-content owl-carousel owl-theme">
+                </div>
+                <div class="text-start">
+                    <button class="custom-btn btn-12 btn-search-code"><span><a
+                            class="nav-link text-white p-0" href="/filter">Click!</a></span><span>Xem thêm</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Một số chủ đề hot -->
+            <div class="row mb-4" id="topic-hot">
+                <h1 class="text-center name-title fw-bold">Các chủ đề bài thi</h1>
+                <div class="avatar-course d-flex align-items-center">
+                </div>
+            </div>
+        </div>
+        <!-- BÀI ĐĂNG GẦN ĐÂY -->
+        <div class="col-md-4" id="last-post" style="padding-right: 0;">
+            <div class="position-sticky p-2 px-4 rounded last-post"
+                 style="top: 6rem">
+                <h2 class="name-title fw-bold">Bài đăng gần đây</h2>
+                <div class="last-post-content"></div>
+                <button class="custom-btn btn-12 btn-search-code">
+                    <span><a class="nav-link text-white p-0" href="/filter">Click!</a></span><span>Xem thêm</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+<div class="q-a container" style="display: none">
+    <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ask-ans">
+                    <div class="d-flex w-100" style="height: 90vh;overflow: hidden;">
+                        <div class="position-relative mx-5" style="width: 55%;">
+                            <div class="modal-ask">
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="flex-grow-1 overflow-scroll">
+                            <form id="modal-comment">
+                                <h4>Bình luận!</h4>
+                                <input name="askId" class="modal-comment-askid d-none">
+                                <textarea name="content" id="commentAns" class="w-100"></textarea>
+                                <div class="text-end mt-2 mx-2">
+                                    <button class="btn-comment custom-btn btn-12">
+                                        <span>Click</span><span>Xác nhận</span></button>
+                                </div>
+                            </form>
+                            <h4>Trả lời</h4>
+                            <div class="modal-comment-content">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="q-a__post">
+        <div class="d-flex justify-content-between">
+            <button class="btn-open-post__question btn btn-primary px-5">
+                <i class="mx-2 fa fa-clipboard" aria-hidden="true"></i>Đăng bài
+            </button>
+            <button class="btn-open-my_ask btn btn-primary px-2">
+                <i class="mx-2 fa fa-clipboard" aria-hidden="true"></i>Bài đăng của tôi
+            </button>
+        </div>
+        <form id="post-question" class="mt-2" style="display: none;">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control mb-2" id="floatingPurpose" name="purpose" placeholder="Mục đích">
+                <label for="floatingPurpose">Mục đích</label>
+            </div>
+            <textarea name="content" id="post-question__answer" class="w-100"></textarea>
+            <div class="text-end mt-2 px-2">
+                <button
+                        class="btn- custom-btn btn-12"><span>Click</span><span>Đăng</span></button>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <div class="row justify-content-evenly ask-content w-100 m-0">
+    </div>
+    <div class="text-center btn-ask-content">
+    </div>
+</div>
+<th:block th:insert="footer">
+</th:block>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+        integrity="sha512-+NqPlbbtM1QqiK8ZAo4Yrj2c4lNQoGv8P79DPtKzj++l5jnN39rHA/xsqn8zE9l0uSoxaCdrOgFs6yjyfbBxSg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+        integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+        integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/0l814uwwlm1ep237ekms2l8ncvokiqeasekns39jag4vujli/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script th:src="@{/js/index.js}">
+</script>
+<script th:src="@{/js/home.js}"></script>
+</body>
+</html>

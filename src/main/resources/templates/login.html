@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Animated Login Form</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{./css/login.css}">
+</head>
+
+<body>
+<img class="wave" th:src="@{https://ucarecdn.com/e0df10f5-ad69-4163-b71e-3494f2f596fb/wave.png}">
+<div class="container">
+    <div class="img">
+        <img th:src="@{https://ucarecdn.com/e61a35c9-7e54-4de8-bde9-db3a7995ab77/bg.svg}">
+    </div>
+    <div class="login-content">
+        <div class="d-flex align-items-center flex-column w-100">
+            <img th:src="@{https://ucarecdn.com/d5bf44ec-c21f-4a45-a345-954caba51591/avatar.png}">
+            <h2 class="title">Welcome</h2>
+            <small class="error rounded">
+            </small>
+            <th:block th:if="${message}">
+                <small class="rounded text-danger alert-mess alert-danger p-2" th:utext="${message}">
+                </small>
+            </th:block>
+        </div>
+        <div class="position-relative">
+            <form id="form_login" method="post" th:action="@{/security_check}">
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Username</h5>
+                        <input type="text" class="input" name="username" th:value="${username}">
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Password</h5>
+                        <input type="password" class="input" name="password" minlength="6">
+                    </div>
+                </div>
+                <div>
+                    <a href="#" id="go_signup"><i style="color: #d9d9d9;" class="mx-2 fas fa-user-plus"></i>Đăng kí
+                        ngay</a>
+                    <a href="#"><i style="color: #d9d9d9;" class="mx-2 fas fa-user-slash"></i>Quên mật khẩu?</a>
+                </div>
+                <input type="submit" class="btn" value="Login">
+            </form>
+            <form id="form_signup" method="post" th:action="@{/sign-up}">
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Email</h5>
+                        <input type="email" class="input email" name="email" autocomplete="off">
+                    </div>
+                </div>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Username</h5>
+                        <input type="text" class="input username" name="username" autocomplete="off">
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Password</h5>
+                        <input type="password" class="input" name="password" minlength="6">
+                    </div>
+                </div>
+                <a href="#" id="have_account">
+                    <i style="color: #d9d9d9;" class="mx-2 fas fa-check"></i>Đã có tài khoản
+                </a>
+                <input type="submit" class="btn" value="Sign Up">
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.0/jquery.min.js"
+        integrity="sha512-b6lGn9+1aD2DgwZXuSY4BhhdrDURVzu7f/PASu4H1i5+CRpEalOOz/HNhgmxZTK9lObM1Q7ZG9jONPYz8klIMg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+        integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+        crossorigin="anonymous"></script>
+<script th:src="@{./js/login.js}"></script>
+<script>
+    var urlLogin = 'http://localhost:8080/api/login';
+    $(document).ready(function () {
+
+        // $(document).on('submit', '#form_login', function (e) {
+        //     var formData = new FormData(this);
+        //     e.preventDefault();
+        //     $.ajax({
+        //         url: urlLogin,
+        //         type: "POST",
+        //         data: formData,
+        //         enctype: "multipart/form-data",
+        //         processData: false,
+        //         contentType: false,
+        //         cache: false,
+        //         success: function (res) {
+        //             console.log(res);
+        //         }, error: function (e) {
+        //             console.log(e);
+        //             console.log('Error');
+        //         }
+        //     });
+        // });
+    });
+</script>
+</body>
+
+</html>

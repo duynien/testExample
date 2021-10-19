@@ -1,0 +1,30 @@
+.blog-header {
+    z-index: 2;
+    top: 0;
+    line-height: 1;
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37);
+}
+
+@media (min-width: 768px) {
+    .display-4 {
+        font-size: 3rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .h-md-250 {
+        height: 250px;
+    }
+}
+
+.blog-footer {
+    padding: 10px 0;
+    color: #727272;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-top: .05rem solid #e5e5e5;
+}
+
+.blog-footer p:last-child {
+    margin-bottom: 0;
+}

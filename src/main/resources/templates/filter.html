@@ -1,0 +1,197 @@
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!-- <div class="tutorial">
+        <img src="./macbook.png" alt="">
+        <iframe width="720px" height="450px" src="https://www.youtube.com/embed/a5eel4g0iJc" frameborder="0"></iframe>
+    </div> -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lựa chọn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+          integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" th:href="@{/css/filter.css}">
+</head>
+
+<body>
+<!--<div class="loading">-->
+<!--    <div class="btn-load h-100 d-flex justify-content-center align-items-center">-->
+<!--        <div class="btn btn-outline-primary border-0 d-flex px-2 py-4">-->
+<!--            <h4>Loading...</h4>-->
+<!--            <div class="circle-loading2">-->
+<!--                <div></div>-->
+<!--                <div></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!-- MODAL FILTER -->
+<div class="modal fade" id="modal-filter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="title-filter">Lựa chọn</h3>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-range" class="text-center" method="POST" action="/filter/do-exam">
+                    <div class="d-flex align-items-center flex-column">
+                        <input type="text" name="code"
+                               class="modal-filter-code form-control w-25 text-center" readonly>
+                        <div class="easy my-3 d-flex align-content-center w-100">
+                            <label style=" text-align: end;width: 25vh;padding-right: 15px;">Câu hỏi
+                                dễ:</label>
+                            <input type="range" id="ques-easy" name="easy" min="0" max="20" value="0" step="2">
+                            <span class="val-easy d-flex align-items-center
+                             justify-content-center fw-bold text-white">50</span>
+                        </div>
+                        <div class="normal my-3 d-flex align-content-center w-100">
+                            <label style=" text-align: end;width: 25vh;padding-right: 15px;">Câu hỏi
+                                trung bình:</label>
+                            <input type="range" id="ques-normal" name="normal" min="0" max="20" value="0" step="2">
+                            <span class="val-normal d-flex align-items-center
+                             justify-content-center fw-bold text-white">50</span>
+                        </div>
+                        <div class="difficult my-3 d-flex align-content-center w-100">
+                            <label style=" text-align: end;width: 25vh;padding-right: 15px;">Câu hỏi
+                                khó:</label>
+                            <input type="range" id="ques-difficult" name="difficult" min="0" max="20" value="0"
+                                   step="2">
+                            <span class="val-difficult d-flex align-items-center
+                             justify-content-center fw-bold text-white">50</span>
+                        </div>
+                    </div>
+                    <button class="custom-btn btn-5">Xác nhận</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODAL SELECT-->
+<div class="modal fade" id="modal-select" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lựa chọn</h5>
+                <button type="button" class="btn-close btn-select-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="new">
+                    <form id="form-select-filter" method="post" th:action="@{/select/do-exam}">
+                        <input name="message" type="text" id="message" class="d-none">
+                        <div class="form-select-filter-content"></div>
+                        <div class="pagi-select text-center mb-2"></div>
+                        <div class="custom-btn btn-5 btn-submit text-center">Submit</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container content-container">
+    <div class="row justify-content-center">
+        <div class="blog-header p-0 position-sticky mt-2" style="top: 0;z-index: 1;">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark text-light rounded p-0">
+                <div class="collapse navbar-collapse d-flex justify-content-around py-2"
+                     id="navbarSupportedContent">
+                    <a class="h2 m-0" href="/">
+                        <img th:src="@{https://ucarecdn.com/e56ebcfb-008f-437d-834e-d4b2876f7d89/logo.png}"
+                             style="height: 10vh"/>
+                    </a>
+                    <ul class="navbar-nav">
+                        <li class="nav-qa">
+                            <a class="nav-link fw-bold text-white" style="font-size: 20px;"
+                               href="/?qa=tab">Hỏi</span></a>
+                        </li>
+                        <li class="nav-qa">
+                            <a class="nav-link fw-bold text-white" style="font-size: 20px;"
+                               href="/?user=tab">Cá nhân</span></a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <p class="m-0 mx-2 time"
+                           style="font-family: 'Orbitron', sans-serif;letter-spacing: 3px"></p>
+                    </div>
+                    <form class="d-flex m-0 position-relative">
+                        <input class="form-control me-2 value-search" type="search" placeholder="Search">
+                        <button class="custom-btn btn-12 btn-search"><span>Click!</span><span>Tìm kiếm</span>
+                        </button>
+                        <div class="search-content position-absolute bg-light w-100 mt-5 rounded">
+                        </div>
+                    </form>
+                </div>
+            </nav>
+        </div>
+        <div class="content row p-0">
+            <div class="col-8 mt-2 p-0">
+                <div class="p-0 position-relative">
+                    <div class="choice-lesson">
+                        <label class="fw-bold text-start h3 m-0">Chủ đề</label>
+                        <div class="wrapper-card subnav-lesson row justify-content-between mx-1">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="choice-topic">
+                        <label class="fw-bold text-start h3">Đề tài</label>
+                        <div class="wrapper-card subnav-topic row mx-1">
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="content-item my-2" style="min-height: 75vh;">
+                    <h1 class="bg-white py-3 d-flex justify-content-center rounded"
+                        style="height: 75vh">
+                        Hãy chọn chủ đề</h1>
+                </div>
+            </div>
+            <div class="col-4 p-0">
+                <div class="position-sticky last-post mt-2 p-2 px-4">
+                    <div class="username mt-3 d-flex align-items-center position-relative">
+                        <h4 class="username-content m-0">
+                            <span class="text-light username-avatar"></span><span class="username-name text-uppercase"
+                                                                                  sec:authentication="name"></span>
+                        </h4>
+                        <span class="mx-3">
+                            <a class="text-white bg-danger rounded-circle py-1 px-2" href="/logout" id="logout">
+                            <i class="fa fa-power-off" aria-hidden="true"></i></a>
+                        </span>
+                    </div>
+                    <h2 class="mt-3 h1 fw-bold title" style="font-family: none;">Bài đăng gần đây</h2>
+                </div>
+            </div>
+        </div>
+        <th:block th:insert="footer">
+        </th:block>
+    </div>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"
+        integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+        integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
+<script>
+    moment.locale("vi");
+    setInterval(function () {
+        var parse = moment().format("LL,LTS");
+        $(".time").text(parse);
+    }, 1000);
+</script>
+<script th:src="@{/js/filter.js}"></script>
+</body>
+
+</html>

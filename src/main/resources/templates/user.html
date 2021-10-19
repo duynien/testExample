@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+        integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    #particles-js {
+      height: 100vh;
+      background-color: rgb(29, 29, 23);
+      background-size: cover;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+    }
+
+    .profile {
+      margin: 20px 0;
+      position: absolute;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .profile-sidebar {
+      padding: 20px 0 10px 0;
+    }
+
+    .profile-userpic img {
+      float: none;
+      margin: 0 auto;
+      width: 50%;
+      height: 50%;
+      -webkit-border-radius: 50% !important;
+      -moz-border-radius: 50% !important;
+      border-radius: 50% !important;
+    }
+
+    .profile-usertitle {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .profile-usertitle-name {
+      color: #5a7391;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    .profile-usertitle-job {
+      text-transform: uppercase;
+      color: #5b9bd1;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .profile-userbuttons {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .profile-userbuttons .btn {
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 15px;
+      margin-right: 5px;
+    }
+
+    .profile-userbuttons .btn:last-child {
+      margin-right: 0px;
+    }
+
+    /* Profile Content */
+
+    .profile-content {
+      padding: 20px;
+      /* background: #fff; */
+      min-height: 460px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="particles-js">
+  <div class="row profile">
+    <div class="col-md-3">
+      <div class="profile-sidebar">
+        <!-- SIDEBAR USERPIC -->
+        <div class="profile-userpic d-flex justify-content-center">
+          <img src="https://banner2.cleanpng.com/20180626/fhs/kisspng-avatar-user-computer-icons-software-developer-5b327cc98b5780.5684824215300354015708.jpg"
+               class="img-responsive" alt="">
+        </div>
+        <!-- END SIDEBAR USERPIC -->
+        <!-- SIDEBAR USER TITLE -->
+        <div class="profile-usertitle">
+          <div class="profile-usertitle-name">
+            Marcus Doe
+          </div>
+          <div class="profile-usertitle-job">
+            Developer
+          </div>
+        </div>
+        <div class="profile-userbuttons">
+          <button type="button" class="btn btn-success btn-sm">Xem điểm</button>
+          <a href="/logout" class="btn btn-danger">Đăng xuất</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="profile-content">
+        <table class="table profile-content-point text-white">
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"
+        integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"
+        integrity="sha512-Kef5sc7gfTacR7TZKelcrRs15ipf7+t+n7Zh6mKNJbmW+/RRdCW9nwfLn4YX0s2nO6Kv5Y2ChqgIakaC6PW09A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+        integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+
+</html>
