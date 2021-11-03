@@ -60,8 +60,7 @@
                     </div>
                     <th:block th:if="${rs.content != null}">
                         <button type="submit"
-                                class="custom-btn btn-12 position-sticky mx-3"
-                                style="top: 1.5rem; transform: translate(-40px,-10px)">
+                                class="custom-btn btn-12 position-sticky mx-3">
                             <span class="mx-2" style="width: 100px;">Click!</span>
                             <span class="mx-2" style="width: 100px">Nộp bài</span>
                         </button>
@@ -71,22 +70,24 @@
             <th:block th:if="${rs.content != null && #lists.size(rs.content)<10}">
                 <div>
                     <button class="custom-btn btn-5" onclick="history.back();">Chọn lại</button>
-                    <h2 class="mt-3"><i class="text-warning mx-2 fas fa-surprise"></i>Số câu hỏi phải lớn hơn 10!!Hãy
+                    <h2 class="mt-3 text-dark"><i class="text-warning mx-2 fas fa-surprise"></i>
+                        Số câu hỏi phải lớn hơn 10!!Hãy
                         chọn lại</h2>
                 </div>
             </th:block>
             <th:block th:if="${rs.content == null}">
                 <div>
                     <button class="custom-btn btn-5" onclick="history.back();">Chọn lại</button>
-                    <h2 class="mt-3"><i class="text-warning mx-2 fas fa-surprise"></i>Không đủ dữ liệu về mã đề này!!Hãy
+                    <h2 class="mt-3 text-dark"><i class="text-warning mx-2 fas fa-surprise"></i>
+                        Không đủ dữ liệu về mã đề này!!Hãy
                         chọn lại</h2>
                 </div>
             </th:block>
-            <div class="nav_choice position-sticky w-25" style="top: 2rem; height: 0; margin-top: 10px">
+            <div class="nav_choice position-sticky w-25" style="top: 2rem;height: 0">
                 <th:block th:if="${rs.content != null}">
                     <th:block th:if="${#lists.size(rs.content)>=10}">
-                        <div class="row w-100 m-0 border-0 rounded px-2 bg-light">
-                            <h4 class="d-flex justify-content-center align-items-center text-black">Thời gian
+                        <div class="row w-100 m-0 border-0 rounded px-2" style="background: #c3c4c5;box-shadow: 0 0 3px black">
+                            <h4 class="d-flex justify-content-center align-items-center text-light">Thời gian
                                 <th:block th:if="${rs.time > 0 && #lists.size(rs.content)>=10}">
                                     <div class="mx-2 time" th:value="${rs.time}">
                                         <span class="minutes">15</span>

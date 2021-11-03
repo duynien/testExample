@@ -1,8 +1,6 @@
 package com.java.demo_ttcscn.enitities.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.java.demo_ttcscn.enitities.enum_value.Level;
-import org.hibernate.annotations.Immutable;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

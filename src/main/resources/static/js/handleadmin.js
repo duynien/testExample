@@ -5,6 +5,7 @@ var urlCodeQuestion = 'http://localhost:8080/code-question';
 var urlGetAllCodeQuestionByTopic = 'http://localhost:8080/code-question/topic?topic=';
 var urlQuestion = 'http://localhost:8080/question';
 var urlPost = 'http://localhost:8080/post';
+moment.locale("vi");
 
 function alert(icon, title) {
     Swal.fire({
@@ -16,27 +17,75 @@ function alert(icon, title) {
     });
 }
 
+var stompClient = null;
 var username = $('#username_cont').text();
+const handleAvt = () => {
+    var colors = [
+        "#2196F3",
+        "#32c787",
+        "#00BCD4",
+        "#ff5652",
+        "#ffc107",
+        "#ff85af",
+        "#FF9800",
+        "#39bbb0",
+    ];
+    var color = Math.ceil(Math.random() * (colors.length - 1));
+    var avt_txt = username.charAt(0).toUpperCase();
+    $('#username_avt').text(avt_txt);
+    $('#username_avt').css("background-color", colors[color]);
+}
 $(function () {
+    handleAvt();
     loadResult();
+    connect();
 });
 
-// LOADING
-function loading(excute) {
-    var time = 0;
+function connect(event) {
+    var socket = new SockJS("/websocket");
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, onConnected);
+    stompClient.debug = () => {};
+}
+function onConnected() {
+    stompClient.subscribe("/topic/public", onMessageReceived);
+}
+// function onError(error) {
+//     connectingElement.textContent =
+//         "Không thể kết nối với WebSocket!";
+//     connectingElement.style.color = "red";
+// }
+function handleReceive(message, text) {
+    var sender = message.sender
+    var avt_sender = sender.charAt(0).toUpperCase()
+    var htmlRs = `<li class="notice_content-nav ${text} h5">
+                      <span class="avt-sender">${avt_sender}</span>
+                      <small class="h6">` + moment(message.time).calendar() + `</small>
+                      <p class="m-0 mt-2 d-flex align-items-center">${sender} ${message.content}</p>
+                  </li>`;
+    $('.notice_content_name').prepend(htmlRs);
+}
 
-    function frame() {
-        if (time == 0) {
-            $('.loading').hide();
-            clearInterval(running);
-            excute();
-        } else {
-            $('.loading').show();
-            time++;
-        }
+function onMessageReceived(payload) {
+    var message = JSON.parse(payload.body);
+    if (message.type === "JOIN") {
+        handleReceive(message, 'text-success');
+    } else if (message.type === "LEAVE") {
+        handleReceive(message, 'text-danger');
+    } else if (message.type === "DOEXAM") {
+        handleReceive(message, 'text-success');
     }
+}
 
-    var running = setInterval(frame, 1000);
+function hidePage() {
+    $('.tab-add-question').hide();
+    $('.tab-list-question').hide();
+    $('.tab-table-point').hide();
+    $('.tab-services').hide();
+    $('.services').removeClass('active');
+    $('.add-question').removeClass('active');
+    $('.see-question').removeClass('active');
+    $('.see-point').removeClass('active');
 }
 
 //3.HANDLE SUBMIT
@@ -148,9 +197,6 @@ $(document).on('submit', '#form_add', function (e) {
 $(document).on('submit', '#form_edit', function (e) {
     e.preventDefault();
     var formdata = new FormData(this);
-    // $(this).find(":disabled").each(function () {
-    //     formdata.append($(this).attr("name"), $(this).val());
-    // });
     $(this).trigger('reset');
     $.ajax({
         url: urlQuestion,
@@ -168,6 +214,7 @@ $(document).on('submit', '#form_edit', function (e) {
                                     <label for="B"><span>B.</span>${response.answ_B}</label><br>
                                     <label for="D"><span>C.</span>${response.answ_C}</label><br>
                                     <label for="D"><span>D. </span>${response.answ_D}</label><br>
+                                    <p class="m-0 p-0">Đáp án đúng <span class="badge bg-success">${response.correct_ans}</span></p>
                                     <button class="btn btn-sm btn_edit btn-warning" id="${response.id}" data-toggle="modal"
                                     data-target="#modal-edit-question">Sửa</button>`;
             $('.question-' + response.id).html(html);
@@ -253,35 +300,28 @@ $(document).on('submit', '#form_add_code', function (e) {
 });
 // 4.Khi click vào vào các button
 $(document).on('click', '.add-question', function (e) {
-    e.preventDefault;
-
-    function excute() {
-        hidePage();
-        $('.add-question').addClass('active');
-        $('.tab-add-question').show();
-        handleAllAddQuestion();
-    }
-
-    loading(excute);
+    e.preventDefault();
+    hidePage();
+    $('.add-question').addClass('active');
+    $('.tab-add-question').show();
+    handleAllAddQuestion();
 });
 $(document).on('click', '.see-point', function (e) {
-    e.preventDefault;
+    e.preventDefault();
     loadResult();
+    hidePage();
+    $('.tab-table-point').show();
+    $('.see-point').addClass('active');
 
-    function excute() {
-        hidePage();
-        $('.tab-table-point').show();
-        $('.see-point').addClass('active');
-    }
-
-    loading(excute);
 });
-//5.NAV_MÔN-Danh sách điểm thi
+
+
 $(document).on('click', '.nav-topic-add', function (e) {
     $('.nav-topic-add').removeClass('active');
     $(this).addClass('active');
     $.ajax({
-        url: urlCodeQuestion + '?filter=topic=="' + $(this).text() + '";create_by=="' + username + '"',
+        // url: urlCodeQuestion + '?filter=topic=="' + $(this).text() + '";create_by=="' + username + '"',
+        url: urlCodeQuestion + '?filter=topic=="' + $(this).text() + '"',
         type: "GET",
         dataType: "json",
         success: function (res) {
@@ -306,8 +346,8 @@ $(document).on('change', '.lesson', function () {
         success: function (res) {
             if (res == "") {
                 $('.nav-topic').html(`<li class="nav - item">
-                                                <button class= "btn nav-topic-add" disabled>Chưa có chủ đề</button >
-                                                </li >`);
+                                           <button class= "btn nav-topic-add" disabled>Chưa có chủ đề</button >
+                                       </li >`);
                 $('#codeQuestionId').html("<option>Chưa có</option>");
             } else {
                 var htmlRs = "";
@@ -319,12 +359,13 @@ $(document).on('change', '.lesson', function () {
                 $('.nav-topic').html(htmlRs);
                 $('.nav-topic-add:first').addClass('active');
                 $.ajax({
-                    url: urlCodeQuestion + '?filter=topic=="' + $('.nav-topic-add:first').text() + '";create_by=="' + username + '"',
+                    // url: urlCodeQuestion + '?filter=topic=="' + $('.nav-topic-add:first').text() + '";create_by=="' + username + '"',
+                    url: urlCodeQuestion + '?filter=topic=="' + $('.nav-topic-add:first').text() + '"',
                     type: "GET",
                     dataType: "json",
                     success: function (res) {
                         if (res.content == "") {
-                            $('#codeQuestionId').html("<option>Chưa có mã đề</option>");
+                            $('#codeQuestionId').html(`<option>Chưa có mã đề</option>`);
                         } else {
                             var htmlRs = "";
                             $.each(res.content, function (index, rs) {
@@ -356,7 +397,6 @@ $(document).on('change', '.form_add_code-lesson', function () {
         }
     });
 });
-// 6.CLICK vào modal
 $(document).on('click', '.btn-topic-of-add', function () {
     $.ajax({
         url: urlLesson + "/get-all",
@@ -401,19 +441,6 @@ $(document).on('click', '.btn-code-of-add', function () {
         }
     });
 });
-
-// 7.FUNCTION
-function hidePage() {
-    $('.tab-add-question').hide();
-    $('.tab-list-question').hide();
-    $('.tab-table-point').hide();
-    $('.tab-services').hide();
-    $('.services').removeClass('active');
-    $('.add-question').removeClass('active');
-    $('.see-question').removeClass('active');
-    $('.see-point').removeClass('active');
-}
-
 function handleAllAddQuestion() {
     $.ajax({
         url: urlLesson + "/get-all",
@@ -467,7 +494,6 @@ function handleAllAddQuestion() {
         },
     });
 }
-
 $(document).on('keyup', 'input[name="code"]', function () {
     $('input[name="code"]').removeClass('error');
     $.ajax({
@@ -502,7 +528,6 @@ function handleGetCodeQuestionOnPageSee(res) {
         $(".list-question-code").html(htmlRs);
     }
 }
-
 function handleGetTopicOnPageSee(res) {
     if (res == "") {
         $(".list-question-topic").html(`<option value="null">Bạn chưa có</option>`);
@@ -514,54 +539,49 @@ function handleGetTopicOnPageSee(res) {
         $(".list-question-topic").html(htmlRs);
     }
 }
-
 $(document).on("click", ".see-question", function (e) {
-    e.preventDefault;
-
-    function excute() {
-        hidePage();
-        $(".see-question").addClass("active");
-        $(".tab-list-question").show();
-        $('.list-question-content').empty();
-        $('.pagination-filter-question').empty();
-        $.ajax({
-            url: urlLesson + "/get-all",
-            type: "GET",
-            dataType: "json",
-            success: function (res) {
-                if (res == "") {
-                    $(".list-question-lesson").html(`<option value="0">Chưa có</option>`);
-                } else {
-                    var htmlRs = "";
-                    $.each(res, function (index, rs) {
-                        htmlRs += `<option value="${rs.id}">${rs.title}</option>`;
-                    });
-                    $(".list-question-lesson").html(htmlRs);
-                    $.ajax({
-                        url: urlTopic + "/topic-by-id?id=" + $(".list-question-lesson").val(),
-                        type: "GET",
-                        dataType: "json",
-                        success: function (res) {
-                            handleGetTopicOnPageSee(res);
-                            $.ajax({
-                                url: urlCodeQuestion + '?filter=topic=="' + $(".list-question-topic").val() + '";create_by=="' + username + '"',
-                                type: "GET",
-                                dataType: "json",
-                                success: function (res) {
-                                    handleGetCodeQuestionOnPageSee(res);
-                                },
-                            });
-                        },
-                        error: function (e) {
-                            console.log("lỗi");
-                        }
-                    });
-                }
-            },
-        });
-    }
-
-    loading(excute);
+    e.preventDefault()
+    hidePage();
+    $(".see-question").addClass("active");
+    $(".tab-list-question").show();
+    $('.list-question-content').empty();
+    $('.pagination-filter-question').empty();
+    $.ajax({
+        url: urlLesson + "/get-all",
+        type: "GET",
+        dataType: "json",
+        success: function (res) {
+            if (res == "") {
+                $(".list-question-lesson").html(`<option value="0">Chưa có</option>`);
+            } else {
+                var htmlRs = "";
+                $.each(res, function (index, rs) {
+                    htmlRs += `<option value="${rs.id}">${rs.title}</option>`;
+                });
+                $(".list-question-lesson").html(htmlRs);
+                $.ajax({
+                    url: urlTopic + "/topic-by-id?id=" + $(".list-question-lesson").val(),
+                    type: "GET",
+                    dataType: "json",
+                    success: function (res) {
+                        handleGetTopicOnPageSee(res);
+                        $.ajax({
+                            // url: urlCodeQuestion + '?filter=topic=="' + $(".list-question-topic").val() + '";create_by=="' + username + '"',
+                            url: urlCodeQuestion + '?filter=topic=="' + $(".list-question-topic").val() + '"',
+                            type: "GET",
+                            dataType: "json",
+                            success: function (res) {
+                                handleGetCodeQuestionOnPageSee(res);
+                            },
+                        });
+                    },
+                    error: function (e) {
+                        console.log("lỗi");
+                    }
+                });
+            }
+        },
+    });
 });
 $(document).on("change", ".list-question-lesson", function () {
     $.ajax({
@@ -571,7 +591,8 @@ $(document).on("change", ".list-question-lesson", function () {
         success: function (res) {
             handleGetTopicOnPageSee(res);
             $.ajax({
-                url: urlCodeQuestion + '?filter=topic=="' + $(".list-question-topic").val() + '";create_by=="' + username + '"',
+                // url: urlCodeQuestion + '?filter=topic=="' + $(".list-question-topic").val() + '";create_by=="' + username + '"',
+                url: urlCodeQuestion + '?filter=topic=="' + $(".list-question-topic").val() + '"',
                 type: "GET",
                 dataType: "json",
                 success: function (res) {
@@ -583,7 +604,8 @@ $(document).on("change", ".list-question-lesson", function () {
 });
 $(document).on("change", ".list-question-topic", function () {
     $.ajax({
-        url: urlCodeQuestion + '?filter=topic=="' + $(this).val() + '";create_by=="' + username + '"',
+        // url: urlCodeQuestion + '?filter=topic=="' + $(this).val() + '";create_by=="' + username + '"',
+        url: urlCodeQuestion + '?filter=topic=="' + $(this).val() + '"',
         type: "GET",
         dataType: "json",
         success: function (res) {
@@ -619,14 +641,14 @@ $(document).on('click', '.btn-filter', function (e) {
                                     <h6 class="fw-bold m-0">
                                         Câu hỏi ${rs.id} :<span class="badge bg-secondary">${rs.level}</span>
                                     </h6>
-                                    <small>Được tạo vào ${rs.create_at}</small>
-                                    <h6 class='name_question'>${rs.name_question}</h6>
+                                    <small>Được tạo vào ` + moment(rs.create_at).fromNow() + `</small>
+                                    <h6 class="m-0 name_question">${rs.name_question}</h6>
                                     <label for="A"><span>A.</span>${rs.answ_A}</label><br>
                                     <label for="B"><span>B.</span>${rs.answ_B}</label><br>
                                     <label for="D"><span>C.</span>${rs.answ_C}</label><br>
                                     <label for="D"><span>D. </span>${rs.answ_D}</label><br>
                                     <p class="m-0 p-0">Đáp án đúng <span class="badge bg-success">${rs.correct_ans}</span></p>
-                                    <button class="btn mt-2 btn_edit btn-warning" id="${rs.id}" data-toggle="modal"
+                                    <button class="btn btn-sm mt-2 btn_edit btn-warning" id="${rs.id}" data-toggle="modal"
                                     data-target="#modal-edit-question">Sửa</button>
                                 </div>`;
                 });
@@ -681,16 +703,7 @@ function loadResult() {
                 for (let i = 1; i <= res.totalPage; i++) {
                     pagiRs += `<li class="page-item"><button class="page-link pagi-result" value="${i - 1}">${i}</button></li>`;
                 }
-                $.each(res.content, function (index, rs) {
-                    tableRs += `<tr>
-                                            <th scope="row" class="text-uppercase">${rs.username}</th>
-                                            <td class="table-info">${rs.code}</td>
-                                            <td>${rs.name}</td>
-                                            <td>${rs.number_question}</td>
-                                            <td>${rs.number_point}</td>
-                                            </tr>`;
-                });
-                $(".table-content-result").html(tableRs);
+                handleTableResultIfHave(res.content)
                 $(".pagination-result").html(pagiRs);
                 $('.pagi-result:first').addClass('bg-success text-white');
             }
@@ -717,21 +730,19 @@ function loadResult() {
         }
     })
 }
-
 function handleTableResultIfHave(res) {
     var tableRs = "";
     $.each(res, function (index, rs) {
-        tableRs += `<tr>
-                    <th scope="row" class="text-uppercase">${rs.username}</th>
-                    <td class="table-info">${rs.code}</td> 
-                    <td>${rs.name}</td>
-                    <td>${rs.number_question}</td>
-                    <td>${rs.number_point}</td>
+        tableRs += `<tr class="text-white">
+                        <td class="text-uppercase">${rs.username}</td>
+                        <td>${rs.code}</td> 
+                        <td>${rs.name}</td>
+                        <td>${rs.number_question}</td>
+                        <td>${rs.number_point}</td>
                     </tr>`;
     });
     $(".table-content-result").html(tableRs);
 }
-
 $(document).on('click', '.nav-course-all', function () {
     $('.nav-course-topic').removeClass('active');
     $(this).addClass('active');
@@ -836,7 +847,6 @@ $(document).on('click', '.see-full', function (e) {
     $('.nav_summary').toggle();
     $('.nav_full').toggle();
 });
-
 $(document).on('click', '.btn-search-rs', function () {
     const inpSearch = $('.inp-search-rs').val();
     $.ajax({
@@ -859,18 +869,14 @@ $(document).on('click', '.btn-search-rs', function () {
 
 // 10.HANDLE TRANG SERVICE
 $(document).on('click', '.services', function (e) {
-    function excute() {
-        hidePage();
-        $('.nav-table-lesson').show();
-        $('.nav-table-topic').hide();
-        $('.tab-services').show();
-        $('.services').addClass('active');
-        $('.nav-service-item').removeClass('active');
-        $('.nav-service-item:first').addClass('active');
-        getAllLessonOnService();
-    }
-
-    loading(excute);
+    hidePage();
+    $('.nav-table-lesson').show();
+    $('.nav-table-topic').hide();
+    $('.tab-services').show();
+    $('.services').addClass('active');
+    $('.nav-service-item').removeClass('active');
+    $('.nav-service-item:first').addClass('active');
+    getAllLessonOnService();
 });
 
 // HANDLE TRANG SERVICE Lesson
@@ -1002,7 +1008,6 @@ function handleAfterUpdateTopic(data) {
                                 </td>`;
     $('.content-' + data.id).html(htmlRs);
 }
-
 $(document).on('click', '.btn-edit-topic', function () {
     $.ajax({
         url: urlTopic + "/get-by-id?id=" + $(this).val(),
@@ -1139,7 +1144,6 @@ function handlePost(data) {
                                             </div>`;
     $('.content-post-form').html(htmlRs);
 }
-
 $(document).on('submit', '#post-form', function (e) {
     e.preventDefault();
     var formdata = new FormData(this);

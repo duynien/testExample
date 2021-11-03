@@ -102,15 +102,14 @@ $(document).on("submit", "#form_submit", function (e) {
         success: function (res) {
             var rs = res.content;
             var html = "";
-            html += `<h5><i class="far fa-thumbs-up"></i>Số câu đúng : ${res.number_success}</h5>
-                     <h5><i class="far fa-gem"></i>Số điểm : ${res.point}</h5>
+            html += `<h5 class="text-dark"><i class="far fa-thumbs-up"></i>Số câu đúng : ${res.number_success}</h5>
+                     <h5 class="text-dark"><i class="far fa-gem"></i>Số điểm : ${res.point}</h5>
                      <div class="d-flex align-items-center mt-2">
                           <a class="btn btn-outline-primary" href="/">Trang chủ</a>
-                          <button class="custom-btn btn-12" onclick="history.back();">
-                               <span>Click!</span><span>Làm tiếp</span>
+                          <button class="btn btn-primary m-3" onclick="history.back();">Làm tiếp
                           </button>
                      </div>`;
-            html += `<h3 class="text-white my-2">Một số câu sai trong bài thi và đáp án :</h3>`;
+            html += `<h3 class="text-dark my-2">Một số câu sai trong bài thi và đáp án :</h3>`;
             $.each(rs, function (index, cnt) {
                 html += `<h5 class="bg-white text-dark rounded px-3 py-2">${cnt}</h5>`;
             })
@@ -134,6 +133,7 @@ function connect() {
     username = $('#username-cnt').text();
     var socket = new SockJS("/websocket");
     stompClient = Stomp.over(socket);
+    stompClient.debug = () => {}
     stompClient.connect({}, function () {
         var chatMessage = {
             sender: username.toUpperCase(),

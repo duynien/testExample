@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 public class ChatController {
   @MessageMapping("/chat.register")
@@ -14,14 +16,14 @@ public class ChatController {
   public ChatMessage register(
       @Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
     headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-//    System.out.println(chatMessage);
+    chatMessage.setTime(LocalDateTime.now());
     return chatMessage;
   }
 
   @MessageMapping("/chat.send")
   @SendTo("/topic/public")
   public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-//    System.out.println(chatMessage);
+    chatMessage.setTime(LocalDateTime.now());
     return chatMessage;
   }
 }

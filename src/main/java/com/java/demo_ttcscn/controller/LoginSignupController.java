@@ -31,7 +31,7 @@ public class LoginSignupController {
         model.addAttribute("message", "Đăng nhập sai tài khoản mật khẩu");
       }
       if (message.equals("exist")) {
-        model.addAttribute("message", "Tài khoảng đã tồn tại");
+        model.addAttribute("message", "Tài khoản đã tồn tại");
       }
     }
     model.addAttribute("username", username);

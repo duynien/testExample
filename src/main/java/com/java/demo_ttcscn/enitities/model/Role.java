@@ -1,6 +1,6 @@
 package com.java.demo_ttcscn.enitities.model;
 
-import com.java.demo_ttcscn.enitities.enum_value.ERole;
+import com.java.demo_ttcscn.enitities.enumValue.ERole;
 
 import javax.persistence.*;
 

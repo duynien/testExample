@@ -1,6 +1,5 @@
 package com.java.demo_ttcscn.enitities.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.ToString;
 import org.hibernate.annotations.Immutable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

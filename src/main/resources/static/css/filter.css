@@ -9,6 +9,10 @@ body::-webkit-scrollbar {
     display: none;
 }
 
+.description p {
+    margin-bottom: 0 !important;
+}
+
 html {
     height: 100%;
 }
@@ -38,7 +42,9 @@ i {
     height: 22px;
     text-align: center;
 }
+
 .last-post {
+    margin-left: 15px;
     background: rgba(255, 255, 255, 0.75);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(20px);
@@ -46,6 +52,7 @@ i {
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
+
 .val-easy::before, .val-normal::before, .val-difficult::before {
     content: "";
     position: absolute;
@@ -456,13 +463,13 @@ i {
 }
 
 .wrapper-card {
-    max-height: 30vh;
+    height: 44vh;
     overflow-y: scroll;
     -webkit-appearance: none;
 }
 
 .wrapper-card.subnav-topic {
-    max-height: 23vh;
+    height: 23vh;
 }
 
 .simple-card {

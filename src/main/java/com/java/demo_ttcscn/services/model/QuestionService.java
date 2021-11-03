@@ -1,7 +1,7 @@
 package com.java.demo_ttcscn.services.model;
 
 import com.java.demo_ttcscn.enitities.dto.QuestionDto;
-import com.java.demo_ttcscn.enitities.enum_value.Level;
+import com.java.demo_ttcscn.enitities.enumValue.Level;
 import com.java.demo_ttcscn.enitities.model.Question;
 import com.java.demo_ttcscn.enitities.payload.FilterQuestionRequest;
 import com.java.demo_ttcscn.enitities.result.PageResponse;

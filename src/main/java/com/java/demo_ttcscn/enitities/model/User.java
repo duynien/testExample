@@ -1,39 +1,40 @@
 package com.java.demo_ttcscn.enitities.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Immutable;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Immutable
 public class User implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false, updatable = false)
+  @Column(name = "id", nullable = false)
   private int id;
 
-  @Column(name = "email", nullable = false, unique = true, updatable = false)
+  @Column(name = "email", nullable = false, unique = true)
   private String email;
 
   @JsonIgnore
-  @Column(name = "password", nullable = false, updatable = false)
+  @Column(name = "password", nullable = false)
   private String password;
 
-  @Column(name = "username", nullable = false, unique = true, updatable = false)
+  @Column(name = "username", nullable = false, unique = true)
   private String username;
 
   @JsonIgnore
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.MERGE)
   @JoinTable(
       name = "user_roles",
-      joinColumns = @JoinColumn(name = "user_id", updatable = false),
-      inverseJoinColumns = @JoinColumn(name = "role_id", updatable = false))
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
 
   public String getUsername() {

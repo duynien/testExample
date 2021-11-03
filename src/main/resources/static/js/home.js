@@ -35,9 +35,6 @@ $(document).on("input", 'input[type="range"]', function () {
     var value = $(this).val();
     $(".val-" + $(this).attr("name")).text(value);
 });
-// $(document).on("click", ".btn-close-user", function () {
-//     $(".menu-user").removeClass("active");
-// });
 //REMDER LOAD TRANG HOME
 $(function () {
     if (payload === 'qa=tab') {
@@ -86,7 +83,8 @@ function handleGetResult() {
         method: "GET",
         statusCode: {
             404: function (res) {
-                $(".table-result-user").html(`<p>${res.responseJSON.message}</p>`);
+                $(".table-result-user").html(`<p class="text-light px-3">${res.responseJSON.message}</p>`);
+                return false;
             },
         },
         success: function (res, textStatus, XHR) {
@@ -143,14 +141,14 @@ function lastPost() {
         success: function (res) {
             var htmlRs = "";
             $.each(res.content, function (index, rs) {
-                htmlRs += `<div class="p-2 mb-2 rounded">
+                htmlRs += `<div class="p-0 mb-2 rounded">
                            <div class="notice d-flex justify-content-between">
                                 <span class="d-flex align-items-center span-new">New</span>
                                 <p class="flex-grow-1 p-0 mx-2 my-0">Đề thi ${rs.topic} số ${rs.code}</p>
                            </div>`;
                 htmlRs += `<div class="d-flex justify-content-between">
-                            <button class="btn-filter custom-btn btn-5 mt-2" value="${rs.code}" data-bs-toggle="modal"
-                                                data-bs-target="#modal-filter"><span>Làm ngay</span>
+                            <button class="btn-filter custom-btn btn-12 mt-2" value="${rs.code}" data-bs-toggle="modal"
+                                                data-bs-target="#modal-filter"><span>Click!</span><span>Làm ngay</span>
                             </button>
                             <small class="d-flex align-items-center">
                                 ` + moment(rs.createdAt).fromNow() + `
@@ -461,6 +459,7 @@ function connect(event) {
         var socket = new SockJS("/websocket");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, onConnected);
+        stompClient.debug = () => {};
         // stompClient.connect({}, onConnected, onError);
     }
 }

@@ -98,13 +98,13 @@ function getPageByCode(code) {
                         `<form class="d-inline m-0" method="post" action="/random/do-exam">
                              <input name="code" type="text" value="${code}"  class="d-none">
                              <input name="page" type="text" value="${i}"  class="d-none">
-                             <button class="custom-btn btn-5 mt-2" 
-                                  value="${res}" type="submit">Làm phần ${i}
+                             <button class="custom-btn btn-12 mt-2" 
+                                  value="${res}" type="submit"><span>Click!</span><span>Làm phần ${i}</span>
                              </button>
                         </form>`;
                 }
             } else {
-                htmlRs += `<h4 class="d-inline">Hiện chưa có câu hỏi nào!</h4>`
+                htmlRs += `<h4 class="d-inline mx-2">Hiện chưa có câu hỏi nào!</h4>`
             }
         }
     });
@@ -157,11 +157,11 @@ function getCodeByTopic(topic, payloadTopic) {
                                             <h3 class="card-title"><i class="fa fa-hand-o-right" aria-hidden="true"></i>Chủ đề ${rs.topic}</h3>
                                             <p class="m-0 mb-2 fw-bold"><i class="fa fa-hand-o-right" aria-hidden="true"></i>Mã đề <span class='code'>${rs.code}</span>
                                             </p>
-                                            <p class='m-0'>${rs.description}</p>
-                                            <button class="btn-filter custom-btn btn-5 mt-2" value="${rs.code}" 
+                                            <p class="m-0 description">${rs.description}</p>
+                                            <button class="btn-filter custom-btn btn-12 mt-2" value="${rs.code}" 
                                                data-bs-toggle="modal"
                                                data-bs-target="#modal-filter">
-                                            Lựa chọn
+                                            <span>Click!</span><span>Lựa chọn</span>
                                             </button>
                                             <button class="position-absolute d-flex align-items-center view-select" 
                                              value="${rs.code}" data-bs-toggle="modal"
@@ -195,8 +195,8 @@ function lastPost() {
                                 <p class="flex-grow-1 p-0 mx-2 my-0">Đề thi ${rs.topic} số ${rs.code}</p>
                            </div>`;
                 htmlRs += `<div class="d-flex justify-content-between">
-                            <button class="btn-filter custom-btn btn-5 mt-2" value="${rs.code}" data-bs-toggle="modal"
-                                                data-bs-target="#modal-filter"><span>Làm ngay</span>
+                            <button class="custom-btn btn-12 btn-filter mt-2" alue="${rs.code}" data-bs-toggle="modal"
+                                                data-bs-target="#modal-filter"><span>Click!</span><span>Làm ngay</span>            
                             </button>
                             <small class="d-flex align-items-center">
                                 ` + moment(rs.createdAt).fromNow() + `

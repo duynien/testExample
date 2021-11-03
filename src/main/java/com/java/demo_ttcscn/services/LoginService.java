@@ -1,6 +1,6 @@
 package com.java.demo_ttcscn.services;
 
-import com.java.demo_ttcscn.enitities.enum_value.ERole;
+import com.java.demo_ttcscn.enitities.enumValue.ERole;
 import com.java.demo_ttcscn.enitities.model.Role;
 import com.java.demo_ttcscn.enitities.model.User;
 import com.java.demo_ttcscn.enitities.payload.LoginRequest;

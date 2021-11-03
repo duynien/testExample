@@ -1,11 +1,7 @@
 package com.java.demo_ttcscn.enitities.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.java.demo_ttcscn.enitities.enum_value.Level;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

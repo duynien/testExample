@@ -1,6 +1,6 @@
 package com.java.demo_ttcscn.repositories;
 
-import com.java.demo_ttcscn.enitities.enum_value.ERole;
+import com.java.demo_ttcscn.enitities.enumValue.ERole;
 import com.java.demo_ttcscn.enitities.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
